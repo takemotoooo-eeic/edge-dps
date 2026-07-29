@@ -40,16 +40,17 @@ if __name__ == "__main__":
 
     smplObjects = SmplObjects(input_dir)
     for pkl_name, smpl_params in tqdm(smplObjects):
+        fbxReadWrite = None
         try:
             fbxReadWrite = FbxReadWrite(fbx_source_path)
             fbxReadWrite.addAnimation(pkl_name, smpl_params)
             fbxReadWrite.writeFbx(output_dir, pkl_name)
         except Exception as e:
-            fbxReadWrite.destroy()
             print("An error was thrown in the FBX conversion process")
             raise e
         finally:
-            fbxReadWrite.destroy()
+            if fbxReadWrite is not None:
+                fbxReadWrite.destroy()
     # convert everything in output folder from ascii to binary
     # this line can be commented out if not directly importing to Blender
     out = os.system(f"wine SMPL-to-FBX/FbxFormatConverter.exe -c {output_dir} -binary")

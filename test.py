@@ -3,7 +3,6 @@ import os
 from functools import cmp_to_key
 from pathlib import Path
 from tempfile import TemporaryDirectory
-import random
 
 import jukemirlib
 import numpy as np
@@ -53,8 +52,8 @@ def test(opt):
             file_list = sorted(glob.glob(f"{dir}/*.wav"), key=stringintkey)
             juke_file_list = sorted(glob.glob(f"{dir}/*.npy"), key=stringintkey)
             assert len(file_list) == len(juke_file_list)
-            # random chunk after sanity check
-            rand_idx = random.randint(0, len(file_list) - sample_size)
+            # use the beginning of the song (first ~out_length seconds)
+            rand_idx = 0
             file_list = file_list[rand_idx : rand_idx + sample_size]
             juke_file_list = juke_file_list[rand_idx : rand_idx + sample_size]
             cond_list = [np.load(x) for x in juke_file_list]
@@ -77,8 +76,8 @@ def test(opt):
             print(f"Slicing {wav_file}")
             slice_audio(wav_file, 2.5, 5.0, dirname)
             file_list = sorted(glob.glob(f"{dirname}/*.wav"), key=stringintkey)
-            # randomly sample a chunk of length at most sample_size
-            rand_idx = random.randint(0, len(file_list) - sample_size)
+            # use the beginning of the song (first ~out_length seconds)
+            rand_idx = 0
             cond_list = []
             # generate juke representations
             print(f"Computing features for {wav_file}")

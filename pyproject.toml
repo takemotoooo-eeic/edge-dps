@@ -1,0 +1,47 @@
+[project]
+name = "edge"
+version = "0.1.0"
+description = "EDGE: Editable Dance Generation From Music"
+readme = "README.md"
+requires-python = ">=3.7,<3.11"
+dependencies = [
+    "torch",
+    "torchvision",
+    "torchaudio",
+    "iopath",
+    "numpy",
+    "einops",
+    "tqdm",
+    "p_tqdm",
+    "librosa",
+    "soundfile",
+    "matplotlib",
+    "wandb",
+    "scipy>=1.7,<1.13",
+    "setuptools>=65,<82",
+    "jupyter>=1.1.1",
+    "yt-dlp>=2023.11.16",
+    "accelerate>=0.20.3",
+    "jukemirlib @ git+https://github.com/rodrigo-castellon/jukemirlib.git",
+    "pytorch3d @ git+https://github.com/facebookresearch/pytorch3d.git",
+]
+
+[tool.uv]
+preview = true
+
+[tool.uv.extra-build-dependencies]
+jukebox = ["setuptools<82"]
+pytorch3d = ["torch", "numpy", "ninja"]
+
+[tool.uv.extra-build-variables]
+pytorch3d = { PYTORCH3D_FORCE_NO_CUDA = "1" }
+
+[[tool.uv.index]]
+name = "pytorch-cu118"
+url = "https://download.pytorch.org/whl/cu118"
+explicit = true
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu118", marker = "sys_platform == 'linux' or sys_platform == 'win32'" }]
+torchvision = [{ index = "pytorch-cu118", marker = "sys_platform == 'linux' or sys_platform == 'win32'" }]
+torchaudio = [{ index = "pytorch-cu118", marker = "sys_platform == 'linux' or sys_platform == 'win32'" }]
